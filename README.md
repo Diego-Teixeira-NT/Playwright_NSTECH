@@ -28,7 +28,8 @@ Testes automatizados com [Playwright](https://playwright.dev/) + TypeScript para
 ```
 tests/
 ├── login.spec.ts          # Teste de login
-├── usuarios.spec.ts        # Testes de cadastro, edição e exclusão de usuário (CPF)
+├── usuarios.spec.ts        # Testes de cadastro, edição e exclusão de usuário (CPF) via interface
+├── usuarios.api.spec.ts    # Mesmos testes de cadastro, edição e exclusão, porém via API (validação no front)
 └── helpers/
     ├── login.ts             # Login e validação da página inicial
     ├── menus.ts             # Navegação pelo menu (Administrativo > Usuários)
@@ -36,7 +37,8 @@ tests/
     ├── cadastro.ts          # Cadastro de usuário CPF
     ├── pesquisa.ts          # Pesquisa de usuários pelo nome
     ├── verificacao.ts        # Verifica e exclui usuário existente (evita duplicidade)
-    └── cpf.ts                # Geração de CPF válido
+    ├── cpf.ts                # Geração de CPF válido
+    └── api.ts                # Chamadas diretas à API (Usuario/Pesquisa, Adicionar, Atualizar, ExcluirPorCodigo)
 ```
 
 ## Rodando os testes
@@ -61,12 +63,13 @@ Rodar apenas no Chromium:
 npx playwright test tests/usuarios.spec.ts --project=chromium
 ```
 
-Rodar sem paralelismo (**obrigatório** para `usuarios.spec.ts`, pois os testes de criar/editar/excluir compartilham o mesmo registro e podem colidir se rodados em paralelo):
+Rodar sem paralelismo (**obrigatório** para `usuarios.spec.ts` e `usuarios.api.spec.ts`, pois os testes de criar/editar/excluir compartilham o mesmo registro e podem colidir se rodados em paralelo):
 ```
 npx playwright test tests/usuarios.spec.ts --project=chromium --headed --workers=1
+npx playwright test tests/usuarios.api.spec.ts --project=chromium --headed --workers=1
 ```
 
-> ⚠️ Sem `--workers=1`, os testes de `usuarios.spec.ts` podem falhar por concorrência (um teste exclui o usuário enquanto outro está cadastrando/editando).
+> ⚠️ Sem `--workers=1`, os testes de `usuarios.spec.ts` e `usuarios.api.spec.ts` podem falhar por concorrência (um teste exclui o usuário enquanto outro está cadastrando/editando).
 
 ## Testes disponíveis
 
@@ -74,6 +77,7 @@ npx playwright test tests/usuarios.spec.ts --project=chromium --headed --workers
 - **Criar um usuário CPF** (`usuarios.spec.ts`): acessa Administrativo > Usuários, remove cadastros anteriores com o mesmo nome, cria um novo usuário com CPF válido e confirma o cadastro.
 - **Editar um usuário CPF** (`usuarios.spec.ts`): cria o usuário e edita o campo Nome, validando a atualização.
 - **Excluir um usuário CPF** (`usuarios.spec.ts`): cria o usuário e em seguida o exclui, validando a exclusão.
+- **Criar/Editar/Excluir um usuário CPF via API** (`usuarios.api.spec.ts`): realiza as mesmas operações de cadastro, edição e exclusão chamando diretamente os endpoints da API (`Usuario/Adicionar`, `Usuario/Atualizar`, `Usuario/ExcluirPorCodigo`, `Usuario/Pesquisa`), reaproveitando a sessão autenticada do navegador. A validação de cada operação é feita na interface (front-end), via tela de Usuários.
 
 ## Relatório
 
