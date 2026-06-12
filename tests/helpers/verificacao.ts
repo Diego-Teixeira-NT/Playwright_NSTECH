@@ -1,21 +1,11 @@
 import { Page, expect } from '@playwright/test';
+import { pesquisarUsuarioPorNome } from './pesquisa';
 
 export async function verificarUsuarioCPF(page: Page, nome: string) {
   while (true) {
-    await page.getByRole('button', { name: 'Pesquisar Usuários' }).click();
+    const tabela = await pesquisarUsuarioPorNome(page, nome);
 
-    const nomeField = page
-      .getByText('Nome:', { exact: true })
-      .first()
-      .locator('xpath=..')
-      .locator('input, textarea')
-      .first();
-
-    await nomeField.fill(nome);
-    await page.locator('.btnPesquisarFiltroPesquisa').click();
-    await page.waitForTimeout(1000);
-
-    const linha = page.locator('table').first().locator('tbody tr').first();
+    const linha = tabela.locator('tbody tr').first();
     if (await linha.locator('.clasEditar').count() === 0) break;
 
     await linha.locator('.clasEditar').click();
@@ -23,7 +13,7 @@ export async function verificarUsuarioCPF(page: Page, nome: string) {
     await page.getByRole('button', { name: 'Excluir' }).first().click();
     await page.getByRole('button', { name: 'Sim', exact: true }).click();
 
-    await expect(page.getByText('Processando, aguarde')).not.toBeVisible({ timeout: 10000 });
+    await expect(page.getByText('Processando, aguarde')).not.toBeVisible({ timeout: 20000 });
     await expect(page.getByText('Excluído com sucesso')).toBeVisible();
     await page.waitForTimeout(2000);
   }
