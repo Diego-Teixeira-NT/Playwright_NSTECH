@@ -61,10 +61,12 @@ Rodar apenas no Chromium:
 npx playwright test tests/usuarios.spec.ts --project=chromium
 ```
 
-Rodar sem paralelismo (recomendado para `usuarios.spec.ts`, pois os testes de criar/editar/excluir compartilham o mesmo registro):
+Rodar sem paralelismo (**obrigatório** para `usuarios.spec.ts`, pois os testes de criar/editar/excluir compartilham o mesmo registro e podem colidir se rodados em paralelo):
 ```
 npx playwright test tests/usuarios.spec.ts --project=chromium --headed --workers=1
 ```
+
+> ⚠️ Sem `--workers=1`, os testes de `usuarios.spec.ts` podem falhar por concorrência (um teste exclui o usuário enquanto outro está cadastrando/editando).
 
 ## Testes disponíveis
 
