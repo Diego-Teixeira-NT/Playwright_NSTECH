@@ -8,4 +8,5 @@ test('login com credenciais válidas redireciona para a área logada', async ({ 
   await page.getByRole('button', { name: 'Acessar' }).click();
 
   await expect(page).not.toHaveURL(/\/Login/);
+  await expect(page.getByText('Seja bem-vindo, testes!')).toBeVisible();
 });
