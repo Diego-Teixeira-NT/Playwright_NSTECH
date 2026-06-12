@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test('login com credenciais válidas redireciona para a área logada', async ({ page }) => {
+test('Validar login com sucesso', async ({ page }) => {
   await page.goto('/Login');
 
   await page.getByLabel('Usuário').fill(process.env.LOGIN_USERNAME ?? '');
