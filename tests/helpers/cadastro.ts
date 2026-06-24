@@ -13,6 +13,6 @@ export async function cadastrarUsuarioCPF(page: Page, nome: string, cpf: string)
   await botaoAdicionar.scrollIntoViewIfNeeded();
   await botaoAdicionar.click();
 
-  await expect(page.getByText('Processando, aguarde')).not.toBeVisible({ timeout: 40000 });
+  await expect(page.getByText('Processando, aguarde').first()).not.toBeVisible({ timeout: 40000 });
   await expect(page.getByText('Cadastrado com sucesso')).toBeVisible({ timeout: 10000 });
 }

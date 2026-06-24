@@ -77,7 +77,7 @@ test('Excluir um usuário CPF', async ({ page }) => {
   await page.waitForTimeout(500);
   await page.getByRole('button', { name: 'Sim', exact: true }).click();
 
-  await expect(page.getByText('Processando, aguarde')).not.toBeVisible({ timeout: 40000 });
+  await expect(page.getByText('Processando, aguarde').first()).not.toBeVisible({ timeout: 40000 });
   await expect(page.getByText('Excluído com sucesso')).toBeVisible();
 
   const tabelaAposExclusao = await pesquisarUsuarioPorNome(page, nome);

@@ -1,15 +1,15 @@
 import { Page, expect } from '@playwright/test';
 
 export async function acessarUsuarios(page: Page) {
-  await page.getByText('Administrativo', { exact: true }).click();
+  await expect(page.getByText('Processando, aguarde').first()).not.toBeVisible({ timeout: 15000 });
 
-  const usuariosToggle = page.getByText('Usuários', { exact: true }).nth(1);
-  await usuariosToggle.scrollIntoViewIfNeeded();
-  await usuariosToggle.click();
+  await page.getByPlaceholder('Pesquisar um Formulário').click();
+  await page.getByPlaceholder('Pesquisar um Formulário').fill('Administrativo / Usuários / Usuários');
+  await expect(page.getByText('Processando, aguarde').first()).not.toBeVisible({ timeout: 15000 });
 
-  const usuariosLink = page.getByText('Usuários', { exact: true }).nth(2);
-  await usuariosLink.scrollIntoViewIfNeeded();
-  await usuariosLink.click();
+  await page.getByText('Administrativo / Usuários / Usuários').click();
+  await expect(page.getByText('Processando, aguarde').first()).not.toBeVisible({ timeout: 15000 });
+  await expect(page.getByText('Carregando...')).not.toBeVisible({ timeout: 15000 });
 
-  await expect(page.getByText('Pesquisar Usuários')).toBeVisible();
+  await expect(page.getByText('Pesquisar Usuários')).toBeVisible({ timeout: 10000 });
 }

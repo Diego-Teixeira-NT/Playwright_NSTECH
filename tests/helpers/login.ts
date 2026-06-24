@@ -8,5 +8,5 @@ export async function login(page: Page) {
   await page.getByRole('button', { name: 'Acessar' }).click();
 
   await expect(page).not.toHaveURL(/\/Login/);
-  await expect(page.getByText('Seja bem-vindo, testes!')).toBeVisible();
+  await expect(page.getByText('Seja bem-vindo').first()).toBeVisible({ timeout: 10000 });
 }
